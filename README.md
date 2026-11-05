@@ -134,3 +134,4 @@ useful starting point, but it does not guarantee that the groups are actionable
 or balanced. Review segment sizes and spending averages before using them for
 business decisions; these clusters are exploratory, not definitive customer
 types.
+# Week3_Target_Customer_Segmentation_PCA
