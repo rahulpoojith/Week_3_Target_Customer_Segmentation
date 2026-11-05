@@ -102,3 +102,33 @@ contains annual spending for wholesale customers across Fresh, Milk, Grocery,
 Frozen, Detergents/Paper, and Delicassen categories. Channel and Region are
 included in the source data; this project uses the spending columns to form
 clusters.
+
+## Results
+
+The cleaned dataset contains **440 customers**. PCA retains approximately
+**99.0%** of the spending-data variance in the components used for clustering.
+The silhouette scores from this run were:
+
+| Model | Clusters | Silhouette score |
+|---|---:|---:|
+| K-Means | 3 | 0.551 |
+| Agglomerative Clustering | 3 | 0.520 |
+
+K-Means scored slightly higher in this run. Its segments contain 45, 393, and
+2 customers. The largest segment has its highest average spending in Grocery,
+the 45-customer segment in Fresh, and the 2-customer segment in Frozen. The
+very small segment may represent unusual customers or outliers, so it should
+be reviewed before using the groups for business decisions.
+
+Results are based on the downloaded dataset and the configured random seed.
+Cluster labels are arbitrary; the numbers do not indicate an order or rank.
+
+## Conclusion
+
+PCA made it possible to compare customer spending patterns with fewer
+dimensions while retaining most of the variance. Both clustering methods
+produced similar silhouette scores, with K-Means performing slightly better
+for this dataset and setup. However, the uneven segment sizes—especially the
+two-customer group—show that the three-cluster result may not be equally useful
+for every business purpose. These groups are a starting point for exploring
+customer behavior, not definitive customer types.
