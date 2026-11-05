@@ -15,8 +15,9 @@ the clusters.
 3. **Prepare features:** Standardizes the six spending columns so large-value
    categories do not dominate, then applies PCA. PCA keeps enough components to
    represent 95% of the variance.
-4. **Compare clusters:** Fits K-Means and Agglomerative Clustering with three
-   groups each, using the PCA features.
+4. **Compare clusters:** Tests K-Means and Agglomerative Clustering with 2 to 6
+   groups using the PCA features, then keeps the cluster count with the best
+   silhouette score for each method.
 5. **Review results:** Prints each model's silhouette score and summarizes
    K-Means segments by customer count and highest average spending category.
 
@@ -59,11 +60,11 @@ python data_analysis.py
 
 ## Understanding the comparison
 
-Both clustering methods are asked to make three groups, so their results can
-be compared on the same PCA features. The **silhouette score** ranges from -1
-to 1: a higher score generally indicates that customers are closer to their
-own segment than to other segments. It is an internal clustering measure and
-does not require known labels.
+Both clustering methods try the same small range of cluster counts (2 through
+6), and each method's highest-scoring result is shown. The **silhouette score**
+ranges from -1 to 1: a higher score generally indicates that customers are
+closer to their own segment than to other segments. It is an internal
+clustering measure and does not require known labels.
 
 The plot shows the first two principal components so the groups can be viewed
 on a 2D chart. Clustering uses all PCA components needed to retain 95% of the
@@ -109,26 +110,27 @@ The cleaned dataset contains **440 customers**. PCA retains approximately
 **99.0%** of the spending-data variance in the components used for clustering.
 The silhouette scores from this run were:
 
-| Model | Clusters | Silhouette score |
+The model comparison tries between 2 and 6 clusters and reports the best
+silhouette score found for each method. In the current run:
+
+| Model | Selected clusters | Silhouette score |
 |---|---:|---:|
-| K-Means | 3 | 0.551 |
-| Agglomerative Clustering | 3 | 0.520 |
+| K-Means | 2 | 0.556 |
+| Agglomerative Clustering | 2 | 0.539 |
 
-K-Means scored slightly higher in this run. Its segments contain 45, 393, and
-2 customers. The largest segment has its highest average spending in Grocery,
-the 45-customer segment in Fresh, and the 2-customer segment in Frozen. The
-very small segment may represent unusual customers or outliers, so it should
-be reviewed before using the groups for business decisions.
-
-Results are based on the downloaded dataset and the configured random seed.
-Cluster labels are arbitrary; the numbers do not indicate an order or rank.
+K-Means groups 53 customers in the segment with the highest average Grocery
+spending and 387 customers in the segment with the highest average Fresh
+spending. The plot and CSV contain the latest run's results. Results depend on
+the dataset and configured random seed. Cluster labels are arbitrary; their
+numbers do not indicate an order or rank.
 
 ## Conclusion
 
-PCA made it possible to compare customer spending patterns with fewer
-dimensions while retaining most of the variance. Both clustering methods
-produced similar silhouette scores, with K-Means performing slightly better
-for this dataset and setup. However, the uneven segment sizes—especially the
-two-customer group—show that the three-cluster result may not be equally useful
-for every business purpose. These groups are a starting point for exploring
-customer behavior, not definitive customer types.
+PCA makes it easier to explore customer spending patterns with fewer
+dimensions, while the small silhouette-score search provides a straightforward
+way to choose a cluster count for each method. In this run, K-Means had a
+slightly higher silhouette score than Agglomerative Clustering. The score is a
+useful starting point, but it does not guarantee that the groups are actionable
+or balanced. Review segment sizes and spending averages before using them for
+business decisions; these clusters are exploratory, not definitive customer
+types.

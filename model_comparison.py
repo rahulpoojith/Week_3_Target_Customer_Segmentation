@@ -6,21 +6,34 @@ from sklearn.metrics import silhouette_score
 
 
 def compare_models(features):
-    models = {
-        "K-Means": KMeans(n_clusters=3, random_state=42, n_init=10),
-        "Agglomerative": AgglomerativeClustering(n_clusters=3),
+    model_builders = {
+        "K-Means": lambda count: KMeans(
+            n_clusters=count, random_state=42, n_init=10
+        ),
+        "Agglomerative": lambda count: AgglomerativeClustering(n_clusters=count),
     }
 
     labels_by_model = {}
     scores = []
-    for name, model in models.items():
-        labels = model.fit_predict(features)
-        labels_by_model[name] = labels
+    for name, build_model in model_builders.items():
+        best_score = -1
+        best_count = None
+        best_labels = None
+
+        for count in range(2, 7):
+            labels = build_model(count).fit_predict(features)
+            score = silhouette_score(features, labels)
+            if score > best_score:
+                best_score = score
+                best_count = count
+                best_labels = labels
+
+        labels_by_model[name] = best_labels
         scores.append(
             {
                 "Model": name,
-                "Clusters": len(set(labels)),
-                "Silhouette (higher is better)": silhouette_score(features, labels),
+                "Clusters": best_count,
+                "Silhouette (higher is better)": best_score,
             }
         )
 
